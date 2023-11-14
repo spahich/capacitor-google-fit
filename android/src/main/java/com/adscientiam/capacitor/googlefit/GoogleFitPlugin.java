@@ -61,17 +61,17 @@ public class GoogleFitPlugin extends Plugin {
         return FitnessOptions
             .builder()
             .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
-            .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-            .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+            // .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+            // .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
             // .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ) // カロリー
             // .addDataType(DataType.AGGREGATE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ) // カロリー
             // .addDataType(DataType.TYPE_SPEED, FitnessOptions.ACCESS_READ) // スピード
-            // .addDataType(DataType.TYPE_ACTIVITY_SEGMENT, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_ACTIVITY_SEGMENT, FitnessOptions.ACCESS_READ)
             // .addDataType(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_READ) // 身長
             // .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_READ) // 体重
             // .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_WRITE) // 体重
             // .addDataType(DataType.TYPE_SLEEP_SEGMENT, FitnessOptions.ACCESS_READ) // 睡眠
-            // .addDataType(DataType.TYPE_SLEEP_SEGMENT, FitnessOptions.ACCESS_WRITE) // 睡眠
+            .addDataType(DataType.TYPE_SLEEP_SEGMENT, FitnessOptions.ACCESS_WRITE) // 睡眠
             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ) // 歩数
             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_WRITE) // 歩数
             .build();
@@ -209,11 +209,13 @@ public class GoogleFitPlugin extends Plugin {
         }
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
-            .aggregate(DataType.TYPE_DISTANCE_DELTA)
-            .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
-            .aggregate(DataType.TYPE_SPEED)
-            .aggregate(DataType.TYPE_CALORIES_EXPENDED)
-            .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
+            // .aggregate(DataType.TYPE_DISTANCE_DELTA)
+            // .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
+            // .aggregate(DataType.TYPE_SPEED)
+            // .aggregate(DataType.TYPE_CALORIES_EXPENDED)
+            // .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
+            .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
+            .aggregate(DataType.TYPE_STEP_COUNT_DELTA)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
             // .bucketByTime(1, TimeUnit.DAYS)
             // .bucketByTime(1, TimeUnit.HOURS)
@@ -294,12 +296,12 @@ public class GoogleFitPlugin extends Plugin {
         DataReadRequest readRequest = new DataReadRequest.Builder()
             .aggregate(DataType.TYPE_STEP_COUNT_DELTA) // 歩数
             .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
-            .aggregate(DataType.TYPE_DISTANCE_DELTA)
-            .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
-            .aggregate(DataType.TYPE_SPEED)
-            .aggregate(DataType.TYPE_CALORIES_EXPENDED)
-            .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
-            .aggregate(DataType.TYPE_WEIGHT)
+            // .aggregate(DataType.TYPE_DISTANCE_DELTA)
+            // .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
+            // .aggregate(DataType.TYPE_SPEED)
+            // .aggregate(DataType.TYPE_CALORIES_EXPENDED)
+            // .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
+            // .aggregate(DataType.TYPE_WEIGHT)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
             .enableServerQueries()
             .bucketByTime(30, TimeUnit.MINUTES) // Bucket by 30 minutes interval
@@ -398,12 +400,12 @@ public class GoogleFitPlugin extends Plugin {
         DataReadRequest readRequest = new DataReadRequest.Builder()
             .aggregate(DataType.TYPE_STEP_COUNT_DELTA) // 歩数
             .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
-            .aggregate(DataType.TYPE_DISTANCE_DELTA)
-            .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
-            .aggregate(DataType.TYPE_SPEED)
-            .aggregate(DataType.TYPE_CALORIES_EXPENDED)
-            .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
-            .aggregate(DataType.TYPE_WEIGHT)
+            // .aggregate(DataType.TYPE_DISTANCE_DELTA)
+            // .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
+            // .aggregate(DataType.TYPE_SPEED)
+            // .aggregate(DataType.TYPE_CALORIES_EXPENDED)
+            // .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
+            // .aggregate(DataType.TYPE_WEIGHT)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
             .enableServerQueries()
             // .bucketByTime(1, TimeUnit.HOURS)
