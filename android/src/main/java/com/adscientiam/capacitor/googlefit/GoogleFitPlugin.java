@@ -104,10 +104,26 @@ public class GoogleFitPlugin extends Plugin {
 
     @PluginMethod
     public void logoutGoogleFit(PluginCall call) {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        GoogleSignInClient signInClient = GoogleSignIn.getClient(this.getActivity(), gso);
-        signInClient.signOut();
-        call.resolve();
+        try {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+            GoogleSignInClient signInClient = GoogleSignIn.getClient(this.getActivity(), gso);
+
+            signInClient
+                .signOut()
+                .addOnCompleteListener(
+                    this.getActivity(),
+                    task -> {
+                        if (task.isSuccessful()) {
+                            call.resolve();
+                        } else {
+                            call.reject("Google Fit logout failed");
+                        }
+                    }
+                );
+        } catch (Exception e) {
+            // 例外発生時のエラーハンドリング
+            call.reject("Exception during Google Fit logout: " + e.getMessage());
+        }
     }
 
     // @PluginMethod
