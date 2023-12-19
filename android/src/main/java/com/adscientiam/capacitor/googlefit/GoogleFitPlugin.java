@@ -73,7 +73,7 @@ public class GoogleFitPlugin extends Plugin {
             // .addDataType(DataType.TYPE_SLEEP_SEGMENT, FitnessOptions.ACCESS_READ) // 睡眠
             // .addDataType(DataType.TYPE_SLEEP_SEGMENT, FitnessOptions.ACCESS_WRITE) // 睡眠
             // .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ) // 歩数
-            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_WRITE) // 歩数
+            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_WRITE) // 歩数(書き込み)
             .build();
     }
 
@@ -732,7 +732,17 @@ public class GoogleFitPlugin extends Plugin {
         Fitness
             .getHistoryClient(getActivity(), account)
             .insertData(stepCountDataSet)
-            .addOnSuccessListener(session1 -> call.resolve(ret))
+            .addOnSuccessListener(
+                session1 -> {
+                    // new AlertDialog.Builder(getContext())
+                    //     .setTitle("JAVAのアラート")
+                    //     .setMessage("writeStepCountData成功")
+                    //     .setPositiveButton("OK", null)
+                    //     .show();
+
+                    call.resolve(ret);
+                }
+            )
             .addOnFailureListener(e -> call.reject(e.getMessage()));
 
         return null;
