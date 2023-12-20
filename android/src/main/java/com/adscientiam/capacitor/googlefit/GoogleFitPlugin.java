@@ -721,7 +721,7 @@ public class GoogleFitPlugin extends Plugin {
         JSObject ret = new JSObject();
         ret.put("value", "success");
 
-        DataDeleteRequest request = new DataDeleteRequest.Builder()
+        DataDeleteRequest deleteRequest = new DataDeleteRequest.Builder()
             .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
             .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
             .build();
