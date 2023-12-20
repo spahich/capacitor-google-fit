@@ -720,21 +720,32 @@ public class GoogleFitPlugin extends Plugin {
         JSObject ret = new JSObject();
         ret.put("value", "success");
 
+        DataDeleteRequest request = new DataDeleteRequest.Builder()
+            .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
+            .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
+            .build();
+
         Fitness
             .getHistoryClient(getActivity(), account)
-            .insertData(stepCountDataSet)
+            .deleteData(deleteRequest)
             .addOnSuccessListener(
-                session1 -> {
-                    // new AlertDialog.Builder(getContext())
-                    //     .setTitle("JAVAのアラート")
-                    //     .setMessage("writeStepCountData成功")
-                    //     .setPositiveButton("OK", null)
-                    //     .show();
-
-                    call.resolve(ret);
+                unused -> {
+                    Fitness
+                        .getHistoryClient(getActivity(), account)
+                        .insertData(stepCountDataSet)
+                        .addOnSuccessListener(
+                            session1 -> {
+                                call.resolve(ret);
+                            }
+                        )
+                        .addOnFailureListener(e -> call.reject(e.getMessage()));
                 }
             )
-            .addOnFailureListener(e -> call.reject(e.getMessage()));
+            .addOnFailureListener(
+                e -> {
+                    call.reject(e.getMessage());
+                }
+            );
 
         return null;
     }
