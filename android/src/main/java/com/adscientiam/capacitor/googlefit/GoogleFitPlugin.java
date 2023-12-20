@@ -126,34 +126,25 @@ public class GoogleFitPlugin extends Plugin {
         }
     }
 
-    // @PluginMethod
-    // public void connectToGoogleFit(PluginCall call) {
-    //     // new AlertDialog.Builder(getContext())
-    //     //     .setTitle("JAVAのアラート")
-    //     //     .setMessage("connectToGoogleFit")
-    //     //     .setPositiveButton("OK", null)
-    //     //     .show();
-    //     GoogleSignInAccount account = getAccount();
-    //     if (account == null) {
-    //         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-    //         GoogleSignInClient signInClient = GoogleSignIn.getClient(this.getActivity(), gso);
-    //         Intent signInIntent = signInClient.getSignInIntent();
-    //         startActivityForResult(call, signInIntent, RC_SIGN_IN);
-    //     } else {
-    //         this.requestPermissions();
-    //     }
-    //     call.resolve();
-    // }
-
     @PluginMethod
     public void connectToGoogleFit(PluginCall call) {
         GoogleSignInAccount account = getAccount();
         if (account == null) {
+            new AlertDialog.Builder(getContext())
+                .setTitle("JAVAのアラート")
+                .setMessage("ログインしていません。")
+                .setPositiveButton("OK", null)
+                .show();
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
             GoogleSignInClient signInClient = GoogleSignIn.getClient(this.getActivity(), gso);
             Intent intent = signInClient.getSignInIntent();
             startActivityForResult(call, intent, RC_SIGN_IN);
         } else {
+            new AlertDialog.Builder(getContext())
+                .setTitle("JAVAのアラート")
+                .setMessage("ログインしています。")
+                .setPositiveButton("OK", null)
+                .show();
             this.requestPermissions();
         }
         call.resolve();
