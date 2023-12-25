@@ -267,6 +267,23 @@ public class GoogleFitPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void isPermissionGranted(PluginCall call) {
+        final JSObject result = new JSObject();
+        GoogleSignInAccount account = getAccount();
+        if (account != null) {
+            if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
+                result.put("allowed", false);
+            } else {
+                result.put("allowed", true);
+            }
+        } else {
+            result.put("allowed", false);
+        }
+
+        call.resolve(result);
+    }
+
+    @PluginMethod
     public Task<DataReadResponse> getHistory(final PluginCall call) throws ParseException {
         GoogleSignInAccount account = getAccount();
 

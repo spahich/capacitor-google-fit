@@ -54,6 +54,18 @@
         "slug": "isallowed"
       },
       {
+        "name": "isPermissionGranted",
+        "signature": "() => Promise<AllowedResult>",
+        "parameters": [],
+        "returns": "Promise<AllowedResult>",
+        "tags": [],
+        "docs": "Check if permission is granted",
+        "complexTypes": [
+          "AllowedResult"
+        ],
+        "slug": "ispermissiongranted"
+      },
+      {
         "name": "isGoogleFitInstalled",
         "signature": "() => Promise<{ value: boolean; }>",
         "parameters": [],

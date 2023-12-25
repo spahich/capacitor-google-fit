@@ -21,6 +21,9 @@ var capacitorGoogleFit = (function (exports, core) {
         async isAllowed() {
             throw new Error('Method not implemented.');
         }
+        async isPermissionGranted() {
+            throw new Error('Method not implemented.');
+        }
         async setWriteSleepData() {
             throw new Error('Method not implemented.');
         }

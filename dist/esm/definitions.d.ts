@@ -16,6 +16,10 @@ export interface GoogleFitPlugin {
      */
     isAllowed(): Promise<AllowedResult>;
     /**
+     * Check if permission is granted
+     */
+    isPermissionGranted(): Promise<AllowedResult>;
+    /**
      * Check if Google Fit is installed
      */
     isGoogleFitInstalled(): Promise<{

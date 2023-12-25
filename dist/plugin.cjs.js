@@ -24,6 +24,9 @@ class GoogleFitWeb extends core.WebPlugin {
     async isAllowed() {
         throw new Error('Method not implemented.');
     }
+    async isPermissionGranted() {
+        throw new Error('Method not implemented.');
+    }
     async setWriteSleepData() {
         throw new Error('Method not implemented.');
     }
