@@ -16,6 +16,9 @@ export class GoogleFitWeb extends WebPlugin implements GoogleFitPlugin {
   async logoutGoogleFit(): Promise<void> {
     throw new Error('Method not implemented.');
   }
+  async openGoogleFit(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
   async isAllowed(): Promise<AllowedResult> {
     throw new Error('Method not implemented.');
   }

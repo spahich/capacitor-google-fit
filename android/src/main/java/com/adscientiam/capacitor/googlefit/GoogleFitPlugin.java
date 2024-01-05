@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-// registerForActivityResultを使うために必要
-
 import androidx.annotation.NonNull;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
@@ -264,6 +265,54 @@ public class GoogleFitPlugin extends Plugin {
             result.put("allowed", false);
         }
         call.resolve(result);
+    }
+
+    @PluginMethod
+    public void openGoogleFit(PluginCall call) {
+        Context context = getContext();
+
+        String packageName = "com.google.android.apps.fitness";
+        Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+
+        if (launchIntent != null) {
+            // アラートを展開
+            // AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            // builder.setTitle("Google Fit");
+            // builder.setMessage("Google Fitを起動します。");
+            // builder.setPositiveButton("OK", null);
+            // builder.show();
+
+            context.startActivity(launchIntent);
+        } else {
+            // AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            // builder.setTitle("Google Fit");
+            // builder.setMessage("Google Fitがインストールされていません。");
+            // builder.setPositiveButton("OK", null);
+            // builder.show();
+
+            Intent intent = new Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=" + packageName + "&hl=ja")
+            );
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            // ブラウザまたはPlay Storeでページを開く
+            context.startActivity(intent);
+
+            PackageManager pm = context.getPackageManager();
+            List<PackageInfo> pckInfoList = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES);
+
+            for (PackageInfo pckInfo : pckInfoList) {
+                if (pm.getLaunchIntentForPackage(pckInfo.packageName) != null) {
+                    String opackageName = pckInfo.packageName;
+                    String className = pm.getLaunchIntentForPackage(pckInfo.packageName).getComponent().getClassName() + "";
+                    Log.i("起動可能なパッケージ名", opackageName);
+                    Log.i("起動可能なクラス名", className);
+                } else {
+                    Log.i("----------起動不可能なパッケージ名", pckInfo.packageName);
+                }
+            }
+        }
     }
 
     @PluginMethod

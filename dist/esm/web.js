@@ -12,6 +12,9 @@ export class GoogleFitWeb extends WebPlugin {
     async logoutGoogleFit() {
         throw new Error('Method not implemented.');
     }
+    async openGoogleFit() {
+        throw new Error('Method not implemented.');
+    }
     async isAllowed() {
         throw new Error('Method not implemented.');
     }

@@ -10,6 +10,10 @@ export interface GoogleFitPlugin {
      */
     logoutGoogleFit(): Promise<void>;
     /**
+     * openGoogleFit
+     */
+    openGoogleFit(): Promise<void>;
+    /**
      * Returns wether the permissions are ok or not
      * @returns {Promise}
      * @resolve AllowedResult

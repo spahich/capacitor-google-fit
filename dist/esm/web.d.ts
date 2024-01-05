@@ -4,6 +4,7 @@ export declare class GoogleFitWeb extends WebPlugin implements GoogleFitPlugin {
     constructor();
     connectToGoogleFit(): Promise<void>;
     logoutGoogleFit(): Promise<void>;
+    openGoogleFit(): Promise<void>;
     isAllowed(): Promise<AllowedResult>;
     isPermissionGranted(): Promise<AllowedResult>;
     setWriteSleepData(): Promise<{
