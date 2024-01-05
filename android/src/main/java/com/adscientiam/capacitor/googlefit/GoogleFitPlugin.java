@@ -275,43 +275,40 @@ public class GoogleFitPlugin extends Plugin {
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
 
         if (launchIntent != null) {
-            // アラートを展開
+            // アラート展開
             // AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             // builder.setTitle("Google Fit");
             // builder.setMessage("Google Fitを起動します。");
             // builder.setPositiveButton("OK", null);
             // builder.show();
-
             context.startActivity(launchIntent);
         } else {
+            // アラート展開
             // AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             // builder.setTitle("Google Fit");
             // builder.setMessage("Google Fitがインストールされていません。");
             // builder.setPositiveButton("OK", null);
             // builder.show();
-
             Intent intent = new Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse("https://play.google.com/store/apps/details?id=" + packageName + "&hl=ja")
             );
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            // ブラウザまたはPlay Storeでページを開く
             context.startActivity(intent);
+            // PackageManager pm = context.getPackageManager();
+            // List<PackageInfo> pckInfoList = pm.getInstalledPackages(PackageManager.GET_META_DATA);
 
-            PackageManager pm = context.getPackageManager();
-            List<PackageInfo> pckInfoList = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES);
-
-            for (PackageInfo pckInfo : pckInfoList) {
-                if (pm.getLaunchIntentForPackage(pckInfo.packageName) != null) {
-                    String opackageName = pckInfo.packageName;
-                    String className = pm.getLaunchIntentForPackage(pckInfo.packageName).getComponent().getClassName() + "";
-                    Log.i("起動可能なパッケージ名", opackageName);
-                    Log.i("起動可能なクラス名", className);
-                } else {
-                    Log.i("----------起動不可能なパッケージ名", pckInfo.packageName);
-                }
-            }
+            // for (PackageInfo pckInfo : pckInfoList) {
+            //     if (pm.getLaunchIntentForPackage(pckInfo.packageName) != null) {
+            //         String opackageName = pckInfo.packageName;
+            //         String className = pm.getLaunchIntentForPackage(pckInfo.packageName).getComponent().getClassName() + "";
+            //         Log.i("起動可能なパッケージ名", opackageName);
+            //         Log.i("起動可能なクラス名", className);
+            //     } else {
+            //         Log.i("----------起動不可能なパッケージ名", pckInfo.packageName);
+            //     }
+            // }
         }
     }
 
@@ -320,11 +317,11 @@ public class GoogleFitPlugin extends Plugin {
         final JSObject result = new JSObject();
         GoogleSignInAccount account = getAccount();
         if (account != null) {
-            if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
-                result.put("allowed", true);
-            } else {
-                result.put("allowed", false);
-            }
+            // if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
+            result.put("allowed", true);
+            // } else {
+            //     result.put("allowed", false);
+            // }
         } else {
             result.put("allowed", false);
         }
