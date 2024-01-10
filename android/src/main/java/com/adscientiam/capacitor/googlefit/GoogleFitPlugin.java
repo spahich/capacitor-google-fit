@@ -109,6 +109,15 @@ public class GoogleFitPlugin extends Plugin {
     // }
 
     @PluginMethod
+    public void disableFit(PluginCall call) {
+        Fitness
+            .getConfigClient(this.getActivity(), getAccount())
+            .disableFit()
+            .addOnSuccessListener(task -> call.resolve())
+            .addOnFailureListener(e -> call.reject(e.getMessage()));
+    }
+
+    @PluginMethod
     public void logoutGoogleFit(PluginCall call) {
         try {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -136,20 +145,29 @@ public class GoogleFitPlugin extends Plugin {
 
     @Override
     public void load() {
-        // ActivityResultLauncherを初期化
         activityResultLauncher =
             getActivity()
                 .registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
                     result -> {
+                        int resultCode = result.getResultCode();
+                        Intent data = result.getData();
+
+                        // resultの値をalertで表示する
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle("ActivityResult");
+                        builder.setMessage("Result Code: " + resultCode + "\nData: " + data.toString());
+                        builder.setPositiveButton("OK", null);
+                        builder.show();
+
                         GoogleSignInAccount account = getAccount();
                         if (account != null) {
                             if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
-                                // AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                // builder.setTitle("Google Fit");
-                                // builder.setMessage("Google Fitのパーミッションが許可されていません。");
-                                // builder.setPositiveButton("OK", null);
-                                // builder.show();
+                                // AlertDialog.Builder builderb = new AlertDialog.Builder(getActivity());
+                                // builderb.setTitle("Google Fit");
+                                // builderb.setMessage("Google Fitのパーミッションが許可されていません。");
+                                // builderb.setPositiveButton("OK", null);
+                                // builderb.show();
                                 this.requestPermissions();
                             } else {
                                 // 保存されたコールが存在しない場合
@@ -161,14 +179,10 @@ public class GoogleFitPlugin extends Plugin {
                                 // builderon.show();
                                 return;
                             }
+                        } else {
+                            // resultをalertで表示
+
                         }
-                        // else {
-                        //     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        //     builder.setTitle("Google Fit");
-                        //     builder.setMessage("Google Fitのサインインに失敗しました。");
-                        //     builder.setPositiveButton("OK", null);
-                        //     builder.show();
-                        // }
                     }
                 );
     }

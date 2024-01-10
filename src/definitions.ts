@@ -7,6 +7,11 @@ export interface GoogleFitPlugin {
   connectToGoogleFit(): Promise<void>;
 
   /**
+   * Disable Google Fit
+   */
+  disableFit(): Promise<void>;
+
+  /**
    * Logout from Google Fit
    */
   logoutGoogleFit(): Promise<void>;

@@ -24,6 +24,16 @@
         "slug": "connecttogooglefit"
       },
       {
+        "name": "disableFit",
+        "signature": "() => Promise<void>",
+        "parameters": [],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "Disable Google Fit",
+        "complexTypes": [],
+        "slug": "disablefit"
+      },
+      {
         "name": "logoutGoogleFit",
         "signature": "() => Promise<void>",
         "parameters": [],
