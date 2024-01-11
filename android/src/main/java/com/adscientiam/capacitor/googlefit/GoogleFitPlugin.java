@@ -91,23 +91,6 @@ public class GoogleFitPlugin extends Plugin {
         GoogleSignIn.requestPermissions(getActivity(), GOOGLE_FIT_PERMISSIONS_REQUEST_CODE, getAccount(), getFitnessSignInOptions());
     }
 
-    // @Override
-    // public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    //     super.onActivityResult(requestCode, resultCode, data);
-
-    //     if (requestCode == RC_SIGN_IN) {
-    //         if (resultCode == Activity.RESULT_OK) {
-    //             // ログイン成功時の処理
-    //             GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this.getActivity());
-    //             requestPermissions(); // ログイン成功時にパーミッションをリクエストする
-    //         }
-    //         // else {
-    //         //     // ログインキャンセルまたは失敗時の処理
-    //         //     // エラーを適切に処理するか、必要に応じて追加の処理を実行する
-    //         // }
-    //     }
-    // }
-
     @PluginMethod
     public void logoutGoogleFit(PluginCall call) {
         try {
@@ -136,7 +119,6 @@ public class GoogleFitPlugin extends Plugin {
 
     @Override
     public void load() {
-        // ActivityResultLauncherを初期化
         activityResultLauncher =
             getActivity()
                 .registerForActivityResult(
@@ -145,30 +127,9 @@ public class GoogleFitPlugin extends Plugin {
                         GoogleSignInAccount account = getAccount();
                         if (account != null) {
                             if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
-                                // AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                // builder.setTitle("Google Fit");
-                                // builder.setMessage("Google Fitのパーミッションが許可されていません。");
-                                // builder.setPositiveButton("OK", null);
-                                // builder.show();
                                 this.requestPermissions();
-                            } else {
-                                // 保存されたコールが存在しない場合
-                                // アラート展開
-                                // AlertDialog.Builder builderon = new AlertDialog.Builder(getActivity());
-                                // builderon.setTitle("Google Fit");
-                                // builderon.setMessage("Google Fitのパーミッションが許可されています。");
-                                // builderon.setPositiveButton("OK", null);
-                                // builderon.show();
-                                return;
                             }
                         }
-                        // else {
-                        //     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        //     builder.setTitle("Google Fit");
-                        //     builder.setMessage("Google Fitのサインインに失敗しました。");
-                        //     builder.setPositiveButton("OK", null);
-                        //     builder.show();
-                        // }
                     }
                 );
     }
@@ -186,60 +147,6 @@ public class GoogleFitPlugin extends Plugin {
         }
         call.resolve();
     }
-
-    // @Override
-    // protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-    //     // アラート展開
-    //     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-    //     builder.setTitle("Google Fit");
-    //     builder.setMessage("handleOnActivityResultが走った。");
-    //     builder.setPositiveButton("OK", null);
-    //     builder.show();
-
-    //     // super.handleOnActivityResult(requestCode, resultCode, data);
-    //     // PluginCall savedCall = getSavedCall();
-
-    //     // if (requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
-    //     //     savedCall.resolve();
-    //     // } else if (requestCode == RC_SIGN_IN) {
-    //     //     if (!GoogleSignIn.hasPermissions(this.getAccount(), getFitnessSignInOptions())) {
-    //     //         this.requestPermissions();
-    //     //     } else {
-    //     //         savedCall.resolve();
-    //     //     }
-    //     // }
-
-    //     super.handleOnActivityResult(requestCode, resultCode, data);
-    //     PluginCall savedCall = getSavedCall();
-
-    //     if (savedCall == null) {
-    //         // 保存されたコールが存在しない場合
-    //         // アラート展開
-    //         AlertDialog.Builder builderon = new AlertDialog.Builder(getActivity());
-    //         builderon.setTitle("Google Fit");
-    //         builderon.setMessage("savedCallがnullだった。");
-    //         builderon.setPositiveButton("OK", null);
-    //         builderon.show();
-
-    //         return;
-    //     }
-
-    //     if (requestCode == RC_SIGN_IN) {
-    //         // Googleサインインの結果を処理
-
-    //         GoogleSignInAccount account = getAccount();
-    //         if (account != null) {
-    //             if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
-    //                 this.requestPermissions();
-    //             } else {
-    //                 savedCall.resolve();
-    //             }
-    //         } else {
-    //             // サインイン失敗
-    //             savedCall.reject("Googleサインインに失敗しました。");
-    //         }
-    //     }
-    // }
 
     @PluginMethod
     public void isGoogleFitInstalled(PluginCall call) {
@@ -275,20 +182,8 @@ public class GoogleFitPlugin extends Plugin {
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
 
         if (launchIntent != null) {
-            // アラート展開
-            // AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            // builder.setTitle("Google Fit");
-            // builder.setMessage("Google Fitを起動します。");
-            // builder.setPositiveButton("OK", null);
-            // builder.show();
             context.startActivity(launchIntent);
         } else {
-            // アラート展開
-            // AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            // builder.setTitle("Google Fit");
-            // builder.setMessage("Google Fitがインストールされていません。");
-            // builder.setPositiveButton("OK", null);
-            // builder.show();
             Intent intent = new Intent(
                 Intent.ACTION_VIEW,
                 Uri.parse("https://play.google.com/store/apps/details?id=" + packageName + "&hl=ja")
@@ -317,11 +212,11 @@ public class GoogleFitPlugin extends Plugin {
         final JSObject result = new JSObject();
         GoogleSignInAccount account = getAccount();
         if (account != null) {
-            // if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
-            result.put("allowed", true);
-            // } else {
-            //     result.put("allowed", false);
-            // }
+            if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
+                result.put("allowed", true);
+            } else {
+                result.put("allowed", false);
+            }
         } else {
             result.put("allowed", false);
         }
@@ -520,11 +415,6 @@ public class GoogleFitPlugin extends Plugin {
                 new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        AlertDialog.Builder failureBuilder = new AlertDialog.Builder(getActivity());
-                        failureBuilder.setTitle("Google Fit");
-                        failureBuilder.setMessage("onFailureが走った。" + e.getMessage());
-                        failureBuilder.setPositiveButton("OK", null);
-                        failureBuilder.show();
                         call.reject(e.getMessage());
                     }
                 }
