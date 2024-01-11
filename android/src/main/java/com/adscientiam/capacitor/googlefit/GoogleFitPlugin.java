@@ -224,11 +224,11 @@ public class GoogleFitPlugin extends Plugin {
         final JSObject result = new JSObject();
         GoogleSignInAccount account = getAccount();
         if (account != null) {
-            if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
-                result.put("allowed", true);
-            } else {
-                result.put("allowed", false);
-            }
+            // if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
+            result.put("allowed", true);
+            // } else {
+            //     result.put("allowed", false);
+            // }
         } else {
             result.put("allowed", false);
         }
