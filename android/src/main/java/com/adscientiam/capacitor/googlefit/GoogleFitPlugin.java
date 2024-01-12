@@ -66,9 +66,9 @@ public class GoogleFitPlugin extends Plugin {
         // 変更を加える場合は、connectToGoogleFitも変更する必要がある
         return FitnessOptions
             .builder()
-            .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
-            .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
-            .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+            // .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+            // .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
+            // .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
             // .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ) // カロリー
             // .addDataType(DataType.AGGREGATE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ) // カロリー
             // .addDataType(DataType.TYPE_SPEED, FitnessOptions.ACCESS_READ) // スピード
@@ -78,7 +78,7 @@ public class GoogleFitPlugin extends Plugin {
             // .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_WRITE) // 体重
             // .addDataType(DataType.TYPE_SLEEP_SEGMENT, FitnessOptions.ACCESS_READ) // 睡眠
             // .addDataType(DataType.TYPE_SLEEP_SEGMENT, FitnessOptions.ACCESS_WRITE) // 睡眠
-            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ) // 歩数
+            // .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ) // 歩数
             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_WRITE) // 歩数(書き込み)
             .build();
     }
@@ -224,11 +224,7 @@ public class GoogleFitPlugin extends Plugin {
         final JSObject result = new JSObject();
         GoogleSignInAccount account = getAccount();
         if (account != null) {
-            // if (!GoogleSignIn.hasPermissions(account, getFitnessSignInOptions())) {
             result.put("allowed", true);
-            // } else {
-            //     result.put("allowed", false);
-            // }
         } else {
             result.put("allowed", false);
         }
@@ -254,7 +250,6 @@ public class GoogleFitPlugin extends Plugin {
         }
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
-            .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
             .aggregate(DataType.TYPE_STEP_COUNT_DELTA)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
             .bucketByActivitySegment(30, TimeUnit.MINUTES)
@@ -339,8 +334,6 @@ public class GoogleFitPlugin extends Plugin {
 
         // https://developers.google.com/android/reference/com/google/android/gms/fitness/request/DataReadRequest.Builder
         DataReadRequest readRequest = new DataReadRequest.Builder()
-            // .aggregate(DataType.TYPE_STEP_COUNT_DELTA) // 歩数
-            // .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
             .aggregate(stepCountDataSource)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
             .enableServerQueries()
@@ -354,12 +347,6 @@ public class GoogleFitPlugin extends Plugin {
                 new OnSuccessListener<DataReadResponse>() {
                     @Override
                     public void onSuccess(DataReadResponse dataReadResponse) {
-                        // AlertDialog.Builder successBuilder = new AlertDialog.Builder(getActivity());
-                        // successBuilder.setTitle("Google Fit");
-                        // successBuilder.setMessage("onSuccessが走った。");
-                        // successBuilder.setPositiveButton("OK", null);
-                        // successBuilder.show();
-
                         List<Bucket> buckets = dataReadResponse.getBuckets();
                         JSONArray activities = new JSONArray();
                         for (Bucket bucket : buckets) {
@@ -370,43 +357,9 @@ public class GoogleFitPlugin extends Plugin {
 
                                 List<DataSet> dataSets = bucket.getDataSets();
 
-                                // long start = bucket.getStartTime(TimeUnit.MILLISECONDS);
-                                // long end = bucket.getEndTime(TimeUnit.MILLISECONDS);
-                                // DataSet AAAdataSet = bucket.getDataSet(DataType.AGGREGATE_STEP_COUNT_DELTA);
-                                // int value = AAAdataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS).asInt();
-
-                                // // アラートを表示する
-                                // String message = "Start Time: " + start + "\n" + "End Time: " + end + "\n" + "Steps: " + value;
-
-                                // AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                // builder.setTitle("Google Fit");
-                                // builder.setMessage(message);
-                                // builder.setPositiveButton("OK", null);
-                                // builder.show();
-
                                 for (DataSet dataSet : dataSets) {
-                                    // アラートでdataSet.getDataPoints()を表示
-
                                     if (dataSet.getDataPoints().size() > 0) {
-                                        // switch (dataSet.getDataType().getName()) {
-                                        //     case "com.google.distance.delta":
-                                        //         summary.put("distance", dataSet.getDataPoints().get(0).getValue(Field.FIELD_DISTANCE));
-                                        //         break;
-                                        //     case "com.google.speed.summary":
-                                        //         summary.put("speed", dataSet.getDataPoints().get(0).getValue(Field.FIELD_AVERAGE));
-                                        //         break;
-                                        //     case "com.google.calories.expended":
-                                        //         summary.put("calories", dataSet.getDataPoints().get(0).getValue(Field.FIELD_CALORIES));
-                                        //         break;
-                                        //     case "com.google.weight.summary":
-                                        //         summary.put("weight", dataSet.getDataPoints().get(0).getValue(Field.FIELD_AVERAGE));
-                                        //         break;
-                                        //     case "com.google.step_count.delta":
                                         summary.put("steps", dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS));
-                                        //     break;
-                                        // default:
-                                        //     Log.i(TAG, "need to handle " + dataSet.getDataType().getName());
-                                        // }
                                     }
                                 }
                                 summary.put("activity", bucket.getActivity());
@@ -457,11 +410,8 @@ public class GoogleFitPlugin extends Plugin {
 
         // https://developers.google.com/android/reference/com/google/android/gms/fitness/request/DataReadRequest.Builder
         DataReadRequest readRequest = new DataReadRequest.Builder()
-            // .aggregate(DataType.TYPE_STEP_COUNT_DELTA) // 歩数
-            // .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
             .aggregate(stepCountDataSource)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-            // .enableServerQueries()
             .bucketByTime(1, TimeUnit.DAYS)
             .build();
 
