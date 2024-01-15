@@ -229,8 +229,8 @@ public class GoogleFitPlugin extends Plugin {
         DataReadRequest readRequest = new DataReadRequest.Builder()
              .aggregate(DataType.TYPE_DISTANCE_DELTA)
              .aggregate(DataType.TYPE_CALORIES_EXPENDED)
-             .aggregate(DataType.TYPE_SLEEP_SEGMENT)
-             .aggregate(DataType.TYPE_STEP_COUNT_CADENCE)
+//              .aggregate(DataType.TYPE_SLEEP_SEGMENT)
+             .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
              .aggregate(DataType.TYPE_HEART_POINTS)
              .aggregate(DataType.TYPE_HEART_RATE_BPM)
 
@@ -239,6 +239,7 @@ public class GoogleFitPlugin extends Plugin {
 //             .aggregate(DataType.TYPE_SPEED)
 //             .aggregate(DataType.TYPE_CALORIES_EXPENDED)
 //             .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
+
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
             .bucketByTime(1, TimeUnit.DAYS)
             .enableServerQueries()
@@ -323,12 +324,14 @@ public class GoogleFitPlugin extends Plugin {
 //             .aggregate(DataType.TYPE_CALORIES_EXPENDED)
 //             .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
 //             .aggregate(DataType.TYPE_WEIGHT)
+
             .aggregate(DataType.TYPE_DISTANCE_DELTA)
             .aggregate(DataType.TYPE_CALORIES_EXPENDED)
-            .aggregate(DataType.TYPE_SLEEP_SEGMENT)
-            .aggregate(DataType.TYPE_STEP_COUNT_CADENCE)
+//             .aggregate(DataType.TYPE_SLEEP_SEGMENT)
+            .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
             .aggregate(DataType.TYPE_HEART_POINTS)
             .aggregate(DataType.TYPE_HEART_RATE_BPM)
+
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
             .bucketByActivitySegment(1, TimeUnit.MINUTES)
             .enableServerQueries()
