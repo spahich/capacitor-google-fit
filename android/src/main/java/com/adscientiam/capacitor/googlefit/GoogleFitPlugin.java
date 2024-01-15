@@ -387,13 +387,7 @@ public class GoogleFitPlugin extends Plugin {
 
         DataSource stepCountDataSource = new DataSource.Builder()
             .setAppPackageName("com.google.android.gms")
-            .aggregate(DataType.TYPE_DISTANCE_DELTA)
-            .aggregate(DataType.TYPE_CALORIES_EXPENDED)
-            .aggregate(DataType.TYPE_SLEEP_SEGMENT)
-            .aggregate(DataType.TYPE_STEP_COUNT_CADENCE)
-            .aggregate(DataType.TYPE_HEART_POINTS)
-            .aggregate(DataType.TYPE_HEART_RATE_BPM)
-            .setType(DataSource.TYPE_DERIVED)
+            .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
             .setStreamName("estimated_steps")
             .build();
 
