@@ -241,7 +241,15 @@ public class GoogleFitPlugin extends Plugin {
         }
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
-            .aggregate(DataType.TYPE_STEP_COUNT_DELTA)
+//             .aggregate(DataType.TYPE_STEP_COUNT_DELTA)
+
+            .aggregate(DataType.TYPE_DISTANCE_DELTA)
+            .aggregate(DataType.TYPE_CALORIES_EXPENDED)
+            .aggregate(DataType.TYPE_SLEEP_SEGMENT)
+            .aggregate(DataType.TYPE_STEP_COUNT_CADENCE)
+            .aggregate(DataType.TYPE_HEART_POINTS)
+            .aggregate(DataType.TYPE_HEART_RATE_BPM)
+
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
             .bucketByActivitySegment(30, TimeUnit.MINUTES)
             .enableServerQueries()
@@ -304,31 +312,31 @@ public class GoogleFitPlugin extends Plugin {
     @PluginMethod
     public Task<DataReadResponse> getHistoryActivity(final PluginCall call) throws ParseException {
         final GoogleSignInAccount account = getAccount();
+
         if (account == null) {
             call.reject("No access");
             return null;
         }
+
         long startTime = dateToTimestamp(call.getString("startTime"));
         long endTime = dateToTimestamp(call.getString("endTime"));
-
         if (startTime == -1 || endTime == -1) {
             call.reject("Must provide a start time and end time");
             return null;
         }
 
-        DataSource stepCountDataSource = new DataSource.Builder()
-            .setAppPackageName("com.google.android.gms")
-            .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
-            .setType(DataSource.TYPE_DERIVED)
-            .setStreamName("estimated_steps")
-            .build();
-
-        // https://developers.google.com/android/reference/com/google/android/gms/fitness/request/DataReadRequest.Builder
         DataReadRequest readRequest = new DataReadRequest.Builder()
-            .aggregate(stepCountDataSource)
+            .aggregate(DataType.TYPE_STEP_COUNT_DELTA)
+            .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
+            .aggregate(DataType.TYPE_DISTANCE_DELTA)
+            .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
+            .aggregate(DataType.TYPE_SPEED)
+            .aggregate(DataType.TYPE_CALORIES_EXPENDED)
+            .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
+            .aggregate(DataType.TYPE_WEIGHT)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+            .bucketByActivitySegment(1, TimeUnit.MINUTES)
             .enableServerQueries()
-            .bucketByTime(30, TimeUnit.MINUTES) // Bucket by 30 minutes interval
             .build();
 
         return Fitness
@@ -345,12 +353,28 @@ public class GoogleFitPlugin extends Plugin {
                             try {
                                 summary.put("start", timestampToDate(bucket.getStartTime(TimeUnit.MILLISECONDS)));
                                 summary.put("end", timestampToDate(bucket.getEndTime(TimeUnit.MILLISECONDS)));
-
                                 List<DataSet> dataSets = bucket.getDataSets();
-
                                 for (DataSet dataSet : dataSets) {
                                     if (dataSet.getDataPoints().size() > 0) {
-                                        summary.put("steps", dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS));
+                                        switch (dataSet.getDataType().getName()) {
+                                            case "com.google.distance.delta":
+                                                summary.put("distance", dataSet.getDataPoints().get(0).getValue(Field.FIELD_DISTANCE));
+                                                break;
+                                            case "com.google.speed.summary":
+                                                summary.put("speed", dataSet.getDataPoints().get(0).getValue(Field.FIELD_AVERAGE));
+                                                break;
+                                            case "com.google.calories.expended":
+                                                summary.put("calories", dataSet.getDataPoints().get(0).getValue(Field.FIELD_CALORIES));
+                                                break;
+                                            case "com.google.weight.summary":
+                                                summary.put("weight", dataSet.getDataPoints().get(0).getValue(Field.FIELD_AVERAGE));
+                                                break;
+                                            case "com.google.step_count.delta":
+                                                summary.put("steps", dataSet.getDataPoints().get(0).getValue(Field.FIELD_STEPS));
+                                                break;
+                                            default:
+                                                Log.i(TAG, "need to handle " + dataSet.getDataType().getName());
+                                        }
                                     }
                                 }
                                 summary.put("activity", bucket.getActivity());
@@ -360,18 +384,9 @@ public class GoogleFitPlugin extends Plugin {
                             }
                             activities.put(summary);
                         }
-
                         JSObject result = new JSObject();
                         result.put("activities", activities);
                         call.resolve(result);
-                    }
-                }
-            )
-            .addOnFailureListener(
-                new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        call.reject(e.getMessage());
                     }
                 }
             );
