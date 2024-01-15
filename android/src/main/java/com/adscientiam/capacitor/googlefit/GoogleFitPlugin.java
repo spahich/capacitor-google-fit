@@ -194,19 +194,6 @@ public class GoogleFitPlugin extends Plugin {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             context.startActivity(intent);
-            // PackageManager pm = context.getPackageManager();
-            // List<PackageInfo> pckInfoList = pm.getInstalledPackages(PackageManager.GET_META_DATA);
-
-            // for (PackageInfo pckInfo : pckInfoList) {
-            //     if (pm.getLaunchIntentForPackage(pckInfo.packageName) != null) {
-            //         String opackageName = pckInfo.packageName;
-            //         String className = pm.getLaunchIntentForPackage(pckInfo.packageName).getComponent().getClassName() + "";
-            //         Log.i("起動可能なパッケージ名", opackageName);
-            //         Log.i("起動可能なクラス名", className);
-            //     } else {
-            //         Log.i("----------起動不可能なパッケージ名", pckInfo.packageName);
-            //     }
-            // }
         }
     }
 
@@ -240,11 +227,18 @@ public class GoogleFitPlugin extends Plugin {
         }
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
-            .aggregate(DataType.TYPE_DISTANCE_DELTA)
-            .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
-            .aggregate(DataType.TYPE_SPEED)
-            .aggregate(DataType.TYPE_CALORIES_EXPENDED)
-            .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
+             .aggregate(DataType.TYPE_DISTANCE_DELTA)
+             .aggregate(DataType.TYPE_CALORIES_EXPENDED)
+             .aggregate(DataType.TYPE_SLEEP_SEGMENT)
+             .aggregate(DataType.TYPE_STEP_COUNT_CADENCE)
+             .aggregate(DataType.TYPE_HEART_POINTS)
+             .aggregate(DataType.TYPE_HEART_RATE_BPM)
+
+//             .aggregate(DataType.TYPE_DISTANCE_DELTA)
+//             .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
+//             .aggregate(DataType.TYPE_SPEED)
+//             .aggregate(DataType.TYPE_CALORIES_EXPENDED)
+//             .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
             .bucketByTime(1, TimeUnit.DAYS)
             .enableServerQueries()
@@ -321,14 +315,20 @@ public class GoogleFitPlugin extends Plugin {
         }
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
-            .aggregate(DataType.TYPE_STEP_COUNT_DELTA)
-            .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
+//             .aggregate(DataType.TYPE_STEP_COUNT_DELTA)
+//             .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
+//             .aggregate(DataType.TYPE_DISTANCE_DELTA)
+//             .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
+//             .aggregate(DataType.TYPE_SPEED)
+//             .aggregate(DataType.TYPE_CALORIES_EXPENDED)
+//             .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
+//             .aggregate(DataType.TYPE_WEIGHT)
             .aggregate(DataType.TYPE_DISTANCE_DELTA)
-            .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
-            .aggregate(DataType.TYPE_SPEED)
             .aggregate(DataType.TYPE_CALORIES_EXPENDED)
-            .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
-            .aggregate(DataType.TYPE_WEIGHT)
+            .aggregate(DataType.TYPE_SLEEP_SEGMENT)
+            .aggregate(DataType.TYPE_STEP_COUNT_CADENCE)
+            .aggregate(DataType.TYPE_HEART_POINTS)
+            .aggregate(DataType.TYPE_HEART_RATE_BPM)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
             .bucketByActivitySegment(1, TimeUnit.MINUTES)
             .enableServerQueries()
