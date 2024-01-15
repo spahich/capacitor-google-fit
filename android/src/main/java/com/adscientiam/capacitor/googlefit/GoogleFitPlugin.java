@@ -234,24 +234,19 @@ public class GoogleFitPlugin extends Plugin {
 
         long startTime = dateToTimestamp(call.getString("startTime"));
         long endTime = dateToTimestamp(call.getString("endTime"));
-
         if (startTime == -1 || endTime == -1) {
             call.reject("Must provide a start time and end time");
             return null;
         }
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
-//             .aggregate(DataType.TYPE_STEP_COUNT_DELTA)
-
             .aggregate(DataType.TYPE_DISTANCE_DELTA)
+            .aggregate(DataType.AGGREGATE_DISTANCE_DELTA)
+            .aggregate(DataType.TYPE_SPEED)
             .aggregate(DataType.TYPE_CALORIES_EXPENDED)
-            .aggregate(DataType.TYPE_SLEEP_SEGMENT)
-            .aggregate(DataType.TYPE_STEP_COUNT_CADENCE)
-            .aggregate(DataType.TYPE_HEART_POINTS)
-            .aggregate(DataType.TYPE_HEART_RATE_BPM)
-
+            .aggregate(DataType.AGGREGATE_CALORIES_EXPENDED)
             .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-            .bucketByActivitySegment(30, TimeUnit.MINUTES)
+            .bucketByTime(1, TimeUnit.DAYS)
             .enableServerQueries()
             .build();
 
