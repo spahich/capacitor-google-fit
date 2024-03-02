@@ -1,5 +1,5 @@
 {
-  "name": "@perfood/capacitor-google-fit",
+  "name": "@spahich/capacitor-google-fit",
   "version": "1.0.2",
   "description": "Capacitor plugin to retrieve data from Google Fit",
   "main": "dist/plugin.cjs.js",
@@ -11,14 +11,14 @@
     "android/build.gradle",
     "dist/"
   ],
-  "author": "Perfood",
+  "author": "spahich",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/perfood/capacitor-google-fit.git"
+    "url": "git+https://github.com/spahich/capacitor-google-fit.git"
   },
   "bugs": {
-    "url": "https://github.com/perfood/capacitor-google-fit/issues"
+    "url": "https://github.com/spahich/capacitor-google-fit/issues"
   },
   "keywords": [
     "capacitor",
