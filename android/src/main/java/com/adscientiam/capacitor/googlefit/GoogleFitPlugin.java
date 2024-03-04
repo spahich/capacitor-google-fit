@@ -147,13 +147,11 @@ public class GoogleFitPlugin extends Plugin {
             GoogleSignInClient signInClient = GoogleSignIn.getClient(this.getActivity(), gso);
             Intent intent = signInClient.getSignInIntent();
             activityResultLauncher.launch(intent);
-            result.put("account", "getSignInIntent");
-            call.resolve(result);
-        } else {
-            this.requestPermissions();
-            result.put("account", "requestPermissions");
-            call.resolve(result);
         }
+
+        this.requestPermissions();
+        result.put("account", "requestPermissions");
+        call.resolve(result);
     }
 
     @PluginMethod
