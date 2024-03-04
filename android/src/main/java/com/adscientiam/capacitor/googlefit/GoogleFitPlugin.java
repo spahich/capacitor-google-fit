@@ -139,16 +139,20 @@ public class GoogleFitPlugin extends Plugin {
 
     @PluginMethod
     public void connectToGoogleFit(PluginCall call) {
+        JSObject result = new JSObject();
+
         GoogleSignInAccount account = getAccount();
         if (account == null) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
             GoogleSignInClient signInClient = GoogleSignIn.getClient(this.getActivity(), gso);
             Intent intent = signInClient.getSignInIntent();
             activityResultLauncher.launch(intent);
-            call.resolve('getSignInIntent');
+            result.put("account", "getSignInIntent");
+            call.resolve(result);
         } else {
             this.requestPermissions();
-            call.resolve('requestPermissions');
+            result.put("account", "requestPermissions");
+            call.resolve(result);
         }
     }
 
